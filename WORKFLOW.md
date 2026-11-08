@@ -95,15 +95,19 @@ Di antarmuka GitHub:
 
 ---
 
-## 3. Checklist Sebelum Merge ke `development`
+### 3. Checklist Sebelum Merge ke `development`
 
 Setiap Pull Request harus memenuhi kriteria berikut:
 - [ ] Tidak ada konflik (*merge conflict*) dengan branch `development`.
+- [ ] Panjang method/fungsi maksimal 20–30 baris; controller maksimal 80–100 baris.
+- [ ] Parameter fungsi maksimal 3 argumen (gunakan DTO / array validated).
+- [ ] Alur fungsi menggunakan Guard Clauses / Early Return (tidak ada nested if-else piramida).
 - [ ] Logika kalkulasi bisnis berada di `app/Services/`, bukan berserakan di controller.
 - [ ] Validasi form menggunakan Form Request class.
+- [ ] Tidak ada eksekusi query database di dalam file `.blade.php`.
 - [ ] Aset gambar/struk tidak di-commit langsung ke git jika ukurannya besar (gunakan storage link atau seeder).
 - [ ] Format kode rapi sesuai PSR-12 / Laravel Pint (`vendor/bin/pint` jika tersedia).
-- [ ] UI mematuhi standar desain netral dan responsif di mobile & desktop.
+- [ ] UI mematuhi standar desain netral dan responsif di mobile & desktop (tanpa emoji norak).
 
 ---
 
