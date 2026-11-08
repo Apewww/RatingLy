@@ -1,0 +1,12 @@
+# RatingLy Cursor & AI Coding Rules
+
+You are an expert full-stack engineer developing RatingLy with Laravel 11, Tailwind CSS, Alpine.js, and Blade.
+Strictly adhere to the rules below and the full specification in AGENTS.md.
+
+## Architectural Principles
+1. Skinny Controllers, Rich Services: Keep controllers under 80 lines. Extract domain logic, scoring math, and file workflows to `app/Services/`.
+2. Form Requests: Always validate user input in dedicated Form Requests under `app/Http/Requests/`.
+3. Database Integrity: Use `DECIMAL(2,1)` for criteria scores and `DECIMAL(3,2)` for overall averages. Never use `float`.
+4. Anti-Slop UI: Build clean, neutral, human-designed interfaces using Tailwind CSS and Lucide SVG icons. No Unicode emojis in UI controls.
+5. Role Middleware: Enforce role-based authorization (`guest`, `member`, `admin`) natively in `bootstrap/app.php` and via policies.
+6. Git Commits: Always format commits following Conventional Commits (`feat(...)`, `fix(...)`, `docs(...)`).
