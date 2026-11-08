@@ -18,16 +18,29 @@ RatingLy adalah **Platform Aggregator Ulasan Tempat & Kuliner Multi-Kriteria** b
 
 ## 2. Kaidah Arsitektur & Clean Code (Laravel 11)
 
-### A. Strict Separation of Concerns (Service Layer Pattern)
+### A. Batas Ukuran Kode & Kompleksitas (Strict Limits)
+Untuk menjaga kode tetap bersih, mudah dibaca, dan mencegah *God Class* atau method raksasa:
+- **Panjang Method / Fungsi**: **Maksimal 20 – 30 baris**. Jika fungsi melebihi batas ini, wajib di-refactor atau dipecah ke *private helper* atau Service terpisah.
+- **Panjang Controller Class**: **Maksimal 80 – 100 baris**. Controller hanya bertindak sebagai *traffic police* (terima request -> panggil Form Request/Service -> return response).
+- **Panjang Service Class**: **Maksimal 150 – 200 baris**. Jika domain membesar, pecah Service berdasarkan spesialisasi (contoh: pisahkan kalkulasi skor dari penanganan file storage struk).
+- **Maksimal Parameter Fungsi**: **Maksimal 3 parameter**. Gunakan array tervalidasi atau DTO ketimbang passing 6-8 variabel terpisah.
+- **Guard Clauses & Early Return**: Hindari *nested if-else* piramida bertingkat. Selalu periksa kondisi gagal/invalid di awal fungsi dan lakukan `return` / `throw` seketika agar alur logika utama tetap lurus (*flat hierarchy*).
+
+### B. Strict Separation of Concerns (Service Layer Pattern)
 - **Controller Ramping (Skinny Controllers)**: Controller hanya bertugas menangani HTTP Request, validasi via Form Request, memanggil Service/Action, dan me-return View atau JsonResponse.
 - **Service Layer**: Logika bisnis kompleks (misalnya: hitung rata-rata agregat rating multi-kriteria, pembobotan ulasan berstruk, verifikasi foto struk) **WAJIB** berada di dalam `app/Services/` (contoh: `ReviewCalculationService`, `ModerationService`, `PlaceService`).
 - **Form Requests**: Validasi tidak boleh ditulis langsung di dalam controller `validate()`. Gunakan Form Request khusus di `app/Http/Requests/` (contoh: `StoreReviewRequest`, `UpdatePlaceRequest`).
+- **Query Scopes**: Filter database yang kompleks wajib dibungkus ke dalam Local Query Scopes di Model (contoh: `Place::filterCategory($id)->minWifiScore(4.0)`).
+- **Blade Views Tanpa Query**: Dilarang mengeksekusi query database di dalam file `.blade.php`. Semua data wajib di-supply matang dari Controller.
 
-### B. Aturan Penamaan & Konvensi
+### C. Aturan Penamaan & Konvensi
 - **Model & Database**:
   - Model: Singular PascalCase (`Place`, `Review`, `MultiCriteriaScore`, `ReviewMedia`, `Upvote`, `Bookmark`, `Report`).
   - Tabel: Plural snake_case (`places`, `reviews`, `multi_criteria_scores`, dll).
   - Tipe Skor: Selalu simpan rating dalam `DECIMAL(2,1)` untuk skor kriteria dan `DECIMAL(3,2)` untuk skor agregat total. Jangan pernah gunakan `FLOAT`.
+- **Intent-Revealing Names**:
+  - Variabel harus ekspresif (hindari variabel 1 huruf seperti `$p`, `$r`). Gunakan `$place`, `$review`, `$criteriaScores`.
+  - Method boolean wajib berawalan predikat tanya: `isVerified()`, `hasReceipt()`, `canBeEditedBy($user)`.
 - **Enums & Roles**:
   - Role User: Gunakan PHP 8.2 native enum atau strict value (`guest`, `member`, `admin`).
   - Verification Status: (`unverified`, `pending`, `verified`).
@@ -35,7 +48,7 @@ RatingLy adalah **Platform Aggregator Ulasan Tempat & Kuliner Multi-Kriteria** b
   - Jangan buat abstraksi interface jika implementasinya hanya satu.
   - Hindari package pihak ketiga yang berlebihan jika fitur native Laravel 11 sudah menyediakannya.
 
-### C. Frontend & UI Guidelines (Blade + Tailwind CSS + Alpine.js)
+### D. Frontend & UI Guidelines (Blade + Tailwind CSS + Alpine.js)
 - **Anti-Slop UI Standard**:
   - Gunakan palet warna netral (`bg-slate-50`, card `bg-white`, border `border-slate-200`, text `text-slate-900` dan `text-slate-500`).
   - Accent Primary: Indigo/Amber hangat modern (`#4F46E5` atau `#D97706`).
