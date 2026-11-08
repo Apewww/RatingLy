@@ -62,7 +62,9 @@ Program Studi Teknik Informatika, Fakultas Sains dan Informatika, Universitas Je
 
 ---
 
-## 📌 Standar Pengembangan Kelompok
+## 📌 Standar Pengembangan Kelompok & AI Agentic
+- Proyek ini menggunakan standar **Clean Code & Service Layer Pattern** di Laravel 11.
+- Panduan lengkap arsitektur dan instruksi untuk AI coding tools (Antigravity, Cursor, Claude Code, dll) tersedia di [**AGENTS.md**](./AGENTS.md) dan [**.cursorrules**](./.cursorrules).
 - Gunakan format branching yang rapi (`feat/...`, `fix/...`, `docs/...`).
 - Buat Pull Request (PR) sebelum menggabungkan fitur ke branch `main`.
 - Gunakan konvensi penamaan commit yang deskriptif (*Conventional Commits*).
